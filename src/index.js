@@ -1,1 +1,1 @@
-export {default as combineReducers} from './compbineReducers'
+export {default as combineReducers} from './combineReducers'

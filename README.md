@@ -10,6 +10,7 @@ Takes an object of reducer arrays, returns combined reducer function
 Eg,
 ```js
 ...
+import {simplify} from 'simplifr'
 import {combineReducers} from 'simplifr-redux'
 
 const initialState = {
@@ -29,7 +30,7 @@ const reducers = {
   `root.path.to.component2.data`: [reducer21, reducer22]      
 }
 
-const store = createStore(combineReducers(reducers), initialState)
+const store = createStore(combineReducers(reducers), simplify(initialState))
 ...
 ```
 

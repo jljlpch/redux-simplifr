@@ -1,5 +1,7 @@
 var test = require('tape')
   , combineReducers = require('../lib').combineReducers
+  , simplify = require('simplifr').simplify
+  , desimplify = require('simplifr').desimplify
 ;
 
 test('combineReducers tests', function(t){
@@ -55,19 +57,29 @@ test('combineReducers tests', function(t){
     }
 
     var reducer = combineReducers({
-      'root.path.to.component1.data.counter': function(state, action){
-        return action.type === 'increment1' ? state + 1 : state;
+      'root.path.to.component1': function(state, action){
+        return action.type === 'increment1'
+          ? Object.assign({}, state, { [action.path]: state[action.path] + 1})
+          : state;
       },
-      'root.path.to.component2.data.counter': function(state, action){
-        return action.type === 'increment2' ? state + action.value : state;
+      'root.path.to.component2': function(state, action){
+        return action.type === 'increment2'
+          ? Object.assign({}, state, { [action.path]: state[action.path] + action.value })
+          : state;
       }
     });
 
-    var s1 = reducer(initialState, { type: 'increment1' });
-    t.deepEqual(s1, res1);
+    var s1 = reducer(simplify(initialState), {
+      type: 'increment1',
+      path: 'root.path.to.component1.data.counter'
+    });
+    t.deepEqual(desimplify(s1), res1);
 
-    var s2 = reducer(s1, { type: 'increment2', value: 10 });
-    t.deepEqual(s2, res2);
+    var s2 = reducer(s1, {
+      type: 'increment2',
+      path: 'root.path.to.component2.data.counter',
+      value: 10 });
+    t.deepEqual(desimplify(s2), res2);
 
     t.end();
   });
