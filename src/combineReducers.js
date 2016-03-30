@@ -1,3 +1,4 @@
+import { update, updateRaw } from 'simplifr'
 /**
  * Turns an object whose values are arrays of different reducer functions,
  * into a single reducer function. It will call only those reducers, that have
@@ -21,6 +22,8 @@ export default function combineReducers(reducers, options){
 
   return function combine(state = {}, action){
     var nextState = {};
+    var isSimplified = action.isSimplified || false;
+
     reducerPaths.forEach(function(path){
       if (action.path) {
         if (action.path.substring(0, path.length) !== path) return;
@@ -28,7 +31,11 @@ export default function combineReducers(reducers, options){
       var reducerList = reducers[path];
       reducerList.forEach(function(reducer){
         if (typeof reducer === 'function') {
-          nextState = reducer(state, action);
+          if (isSimplified) {
+            nextState = update(Object.assign({}, state), action.path, reducer(state[action.path], action));
+          } else {
+            nextState = updateRaw(Object.assign({}, state), action.path, function(prev){ return reducer(prev, action)});
+          }
         }
       });
     });
