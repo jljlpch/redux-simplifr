@@ -7,30 +7,67 @@ Some auxiliary utilities that make [simplifr](https://github.com/krispo/simplifr
 #### `combineReducers(reducers)`
 Takes an object of reducer arrays, returns combined reducer function
 
-Eg,
+Let's show an example how it works,
 ```js
 ...
 import {simplify} from 'simplifr'
 import {combineReducers} from 'redux-simplifr'
 
+// initialize data for separated components
 const initialState = {
   path: {
     to: {
-      component1: {
-        data: {/* JSON */}
-      },
-      component2: {
-        data: {/* JSON */}
-      }
+      component1: {/* JSON */},
+      component2: {/* JSON */}
     }
   }
 }
+
+// define reducers for component1
+const reducer1 = (state = 0, action) => action.type === 'increment1' ? state + 1 : state
+
+//define reducers for component2
+const reducer2 = (state = [], action) => action.type === 'push2' ? [ ...state, action.value ] : state
+
+// gather all reducers into a single object with componets separated by `path`
 const reducers = {
-  `root.path.to.component1.data`: [reducer11, reducer12],
-  `root.path.to.component2.data`: [reducer21, reducer22]      
+  `path.to.component1.counter1`: reducer1,
+  `path.to.component2.stack2`: reducer2      
 }
 
-const store = createStore(combineReducers(reducers), simplify(initialState))
+// combine reducers via simplifr
+const reducer = combineReducers(reducers)
+
+// Now we can dispatch reducer with actions
+reducer(initialState, { 
+  type: 'increment1',
+  path: 'path.to.component1.counter1'  
+})
+/* the result state:
+{
+  path: {
+    to: {
+      component1: { counter1: 1 },
+      component2: {}
+    }
+  }
+}
+*/
+
+// if we don't define exact `path` in action, all reducers will be called
+reducer(initialState, { 
+  type: 'increment1'
+})
+/* the result state:
+{
+  path: {
+    to: {
+      component1: { counter1: 1 },
+      component2: { stack2: [] }      // is also called
+    }
+  }
+}
+*/
 ...
 ```
 
