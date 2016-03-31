@@ -2,8 +2,8 @@
 
 Some auxiliary utilities that make [simplifr](https://github.com/krispo/simplifr) and [redux](https://github.com/reactjs/redux) closer. 
 
-A standard [combiteReducers](http://redux.js.org/docs/api/combineReducers.html) function from redux library gives us 
-an ability to split our store into independent parts of the state, and to manage these parts with corresponding reducer functions.
+A standard [combineReducers](http://redux.js.org/docs/api/combineReducers.html) function from redux library gives us 
+an ability to split our state into independent parts, and to manage these parts with corresponding reducer functions.
 ```js
 const initialStore = {
   todos: ...,
@@ -29,11 +29,11 @@ combineReducers({
   component2: component2_reducer,
 })
 ```
-With this lib we can do this. Even more, with using [simplifr](https://github.com/krispo/simplifr) we can operate with more complex data structures
+We can achieve this using this lib. Even more, we can operate with more complex data structures using [simplifr](https://github.com/krispo/simplifr).
 
 
 For each component, we can pass the `path` information about which part of the state this component should manage.
-`path` is a dot separated string that indicate a json path in our state
+The `path` is a dot separated string that indicate a json path in our state
 ```js
 'commonData.path.to.component1.data'
 ```
@@ -49,7 +49,7 @@ combineReducers({
 })
 ``` 
 
-To dispatch a specific reducer, we should pass a `path` in action
+To dispatch a specific reducer, we should pass the `path` field in our actions
 ```js
 {
   type: 'COMPONENT1_DATA_ACTION',
