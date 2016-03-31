@@ -1,4 +1,4 @@
-# simplifr-redux
+# redux-simplifr
 
 Some auxiliary utilities that make [simplifr](https://github.com/krispo/simplifr) and [redux](https://github.com/reactjs/redux) closer. 
 
@@ -11,7 +11,7 @@ Eg,
 ```js
 ...
 import {simplify} from 'simplifr'
-import {combineReducers} from 'simplifr-redux'
+import {combineReducers} from 'redux-simplifr'
 
 const initialState = {
   path: {

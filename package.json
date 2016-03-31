@@ -1,7 +1,7 @@
 {
-  "name": "simplifr-redux",
+  "name": "redux-simplifr",
   "version": "0.0.3",
-  "description": "Useful simplifr redux utilities.",
+  "description": "Useful redux utilities for combining multiple reducers with using simplifr.",
   "keywords": [
     "simplifr",
     "json",
@@ -14,7 +14,7 @@
     "lib",
     "src"
   ],
-  "homepage": "https://github.com/krispo/simplifr-redux",
+  "homepage": "https://github.com/krispo/redux-simplifr",
   "license": "MIT",
   "main": "lib/index.js",
   "jsnext:main": "src/index.js",
@@ -28,7 +28,7 @@
   "author": "Tin Skipor",
   "repository": {
     "type": "git",
-    "url": "https://github.com/krispo/simplifr-redux.git"
+    "url": "https://github.com/krispo/redux-simplifr.git"
   },
   "dependencies": {
     "redux": "^3.2",
