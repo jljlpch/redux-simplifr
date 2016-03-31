@@ -21,20 +21,20 @@ export default function combineReducers(reducers, options){
   });
 
   return function combine(state = {}, action){
-    var nextState = {};
+    var nextState = Object.assign({}, state);
     var isSimplified = action.isSimplified || false;
 
     reducerPaths.forEach(function(path){
-      if (action.path) {
-        if (action.path.substring(0, path.length) !== path) return;
-      }
+      var currentPath = action.path || path;
+      if (currentPath.substring(0, path.length) !== path) return;
+
       var reducerList = reducers[path];
       reducerList.forEach(function(reducer){
         if (typeof reducer === 'function') {
           if (isSimplified) {
-            nextState = update(Object.assign({}, state), action.path, reducer(state[action.path], action));
+            nextState = update(nextState, currentPath, reducer(state[currentPath], action));
           } else {
-            nextState = updateRaw(Object.assign({}, state), action.path, function(prev){ return reducer(prev, action)});
+            nextState = updateRaw(nextState, currentPath, function(prev){ return reducer(prev, action)});
           }
         }
       });

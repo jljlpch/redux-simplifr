@@ -56,6 +56,42 @@ test('combineReducers tests', function(t){
     t.end();
   });
 
+  t.test('test 2 components without `path` in action, placed in a root with raw data ', function(t){
+
+    var reducer = combineReducers({
+      'counter1': function(state, action){
+        state = state || 0;
+        return action.type === 'increment1' ? state + 1 : state;
+      },
+      'stack1': function(state, action){
+        state = state || [];
+        return action.type === 'push1' ? state.push(action.value) && state : state;
+      },
+      'counter2': function(state, action){
+        state = state || 0;
+        return action.type === 'increment2' ? state + action.value : state;
+      },
+      'stack2': function(state, action){
+        state = state || [];
+        return action.type === 'push2' ? state.push(action.value) && state : state;
+      },
+    });
+
+    var s1 = reducer({}, { type: 'increment1' });
+    t.deepEqual(s1, { counter1: 1, stack1: [], counter2: 0, stack2: [] });
+
+    var s2 = reducer(s1, { type: 'push1', value: 'a' });
+    t.deepEqual(s2, { counter1: 1, stack1: ['a'], counter2: 0, stack2: [] });
+
+    var s3 = reducer(s2, { type: 'increment2', value: 10 });
+    t.deepEqual(s3, { counter1: 1, stack1: ['a'], counter2: 10, stack2: [] });
+
+    var s4 = reducer(s3, { type: 'push2', value: 'b' });
+    t.deepEqual(s4, { counter1: 1, stack1: ['a'], counter2: 10, stack2: ['b'] });
+
+    t.end();
+  });
+
   t.test('test 2 components separated by keys with raw data', function(t){
 
     var reducer = combineReducers({
@@ -134,6 +170,82 @@ test('combineReducers tests', function(t){
         stack2: ['b']
       }
     });
+    t.end();
+  });
+
+  t.test('test 2 components without `path` in action, separated by keys with raw data', function(t){
+
+    var reducer = combineReducers({
+      'component1.counter1': function(state, action){
+        state = state || 0;
+        return action.type === 'increment1' ? state + 1 : state;
+      },
+      'component1.stack1': function(state, action){
+        state = state || [];
+        return action.type === 'push1' ? state.push(action.value) && state : state;
+      },
+      'component2.counter2': function(state, action){
+        state = state || 0;
+        return action.type === 'increment2' ? state + action.value : state;
+      },
+      'component2.stack2': function(state, action){
+        state = state || [];
+        return action.type === 'push2' ? state.push(action.value) && state : state;
+      },
+    });
+
+    var initialState = {
+      component1: {},
+      component2: {}
+    }
+    var s1 = reducer(initialState, { type: 'increment1' });
+    t.deepEqual(s1, {
+      component1: {
+        counter1: 1,
+        stack1: []
+      },
+      component2: {
+        counter2: 0,
+        stack2: []
+      }
+    });
+
+    var s2 = reducer(s1, { type: 'push1', value: 'a' });
+    t.deepEqual(s2, {
+      component1: {
+        counter1: 1,
+        stack1: ['a']
+      },
+      component2: {
+        counter2: 0,
+        stack2: []
+      }
+    });
+
+    var s3 = reducer(s2, { type: 'increment2', value: 10 });
+    t.deepEqual(s3, {
+      component1: {
+        counter1: 1,
+        stack1: ['a']
+      },
+      component2: {
+        counter2: 10,
+        stack2: []
+      }
+    });
+
+    var s4 = reducer(s3, { type: 'push2', value: 'b' });
+    t.deepEqual(s4, {
+      component1: {
+        counter1: 1,
+        stack1: ['a']
+      },
+      component2: {
+        counter2: 10,
+        stack2: ['b']
+      }
+    });
+
     t.end();
   });
 
