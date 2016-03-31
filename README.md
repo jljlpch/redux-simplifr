@@ -42,10 +42,10 @@ The `path` is used in `combineReducers` function to make a right decision of wha
 what reducers should be called, and what part of the state is in use. 
 ```js
 combineReducers({ 
-  commonData.path.to.component1.data: component1_data_reducer,
-  commonData.path.to.component2.data: component2_data_reducer, 
-  component1: component1_reducer,
-  component2: component2_reducer,
+  'commonData.path.to.component1.data': component1_data_reducer,
+  'commonData.path.to.component2.data': component2_data_reducer, 
+  'component1': component1_reducer,
+  'component2': component2_reducer,
 })
 ``` 
 
