@@ -114,8 +114,8 @@ test('combineReducersByPath tests', t => {
     s1 = reducer(s2, { type: 'increment2', value: 10 })
     t.deepEqual(desimplify(s1), { c1: { counter: 1, stack: ['a'] }, c2: { counter: 10, stack: [] } })
 
-    s1 = reducer(s2, { type: 'increment2', value: 10 })
-    t.deepEqual(desimplify(s1), { c1: { counter: 1, stack: ['a'] }, c2: { counter: 10, stack: [] } })
+    s2 = reducer(s1, { type: 'push2', value: 'b' })
+    t.deepEqual(desimplify(s2), { c1: { counter: 1, stack: ['a'] }, c2: { counter: 10, stack: ['b'] } })
 
     t.end()
   })
