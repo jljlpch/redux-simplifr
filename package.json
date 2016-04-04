@@ -1,7 +1,7 @@
 {
   "name": "redux-simplifr",
-  "version": "0.0.3",
-  "description": "Useful redux utilities for combining multiple reducers with using simplifr.",
+  "version": "0.1.0",
+  "description": "Redux utilities for combining multiple reducers with using simplifr.",
   "keywords": [
     "simplifr",
     "json",

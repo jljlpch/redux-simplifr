@@ -1,6 +1,6 @@
 # redux-simplifr
 
-Some auxiliary utilities that make [simplifr](https://github.com/krispo/simplifr) and [redux](https://github.com/reactjs/redux) closer. 
+Combining reducer utilities that make [simplifr](https://github.com/krispo/simplifr) and [redux](https://github.com/reactjs/redux) closer. 
 
 A standard [combineReducers](http://redux.js.org/docs/api/combineReducers.html) function from redux library gives us 
 an ability to split our state into independent parts, and to manage these parts with corresponding reducer functions.
