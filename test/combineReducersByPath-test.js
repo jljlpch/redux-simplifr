@@ -120,4 +120,35 @@ test('combineReducersByPath tests', t => {
     t.end()
   })
 
+  t.test('test 2 components with the same action type ', t => {
+
+    const reducer = combineReducersByPath({
+      'root.c1.counter': (state = 0, action) => action.type === 'increment' ? state + 1 : state,
+      'root.c1.stack': (state = [], action) => action.type === 'push' ? [...state, action.value] : state,
+      'root.c2.counter': (state = 0, action) => action.type === 'increment' ? state + 10 : state,
+      'root.c2.stack': (state = [], action) => action.type === 'push' ? [...state, action.value] : state,
+    })
+
+    const initialState = { c1: { counter: 0, stack: [] }, c2: { counter: 0, stack: [] } }
+    let s1, s2
+
+    // should be updated both component counters, c1 and c2
+    s1 = reducer(simplify(initialState), { type: 'increment' })
+    t.deepEqual(desimplify(s1), { c1: { counter: 1, stack: [] }, c2: { counter: 10, stack: [] } })
+
+    // should be updated both component stacks, c1 and c2
+    s2 = reducer(s1, { type: 'push', value: 'a' })
+    t.deepEqual(desimplify(s2), { c1: { counter: 1, stack: ['a'] }, c2: { counter: 10, stack: ['a'] } })
+
+    // should be updated only c1 counter
+    s1 = reducer(s2, { type: 'increment', path: 'root.c1.counter' })
+    t.deepEqual(desimplify(s1), { c1: { counter: 2, stack: ['a'] }, c2: { counter: 10, stack: ['a'] } })
+
+    // should be updated only c2 stack
+    s2 = reducer(s1, { type: 'push', path: 'root.c2.stack', value: 'b' })
+    t.deepEqual(desimplify(s2), { c1: { counter: 2, stack: ['a'] }, c2: { counter: 10, stack: ['a','b'] } })
+
+    t.end()
+  })
+
 })
