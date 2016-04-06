@@ -1,4 +1,4 @@
-import { update, desimplify } from 'simplifr'
+import { update, desimplify, join } from 'simplifr'
 /**
  * Turns an object whose values are different reducer functions,
  * into a single reducer function. It will call only those reducers, that have
@@ -14,35 +14,41 @@ import { update, desimplify } from 'simplifr'
  */
 export default function combineReducersByPath(reducers){
 
-  if (typeof reducers === 'function') return reducers;
+  if (typeof reducers === 'function') return reducers
 
-  var reducerPaths = Object.keys(reducers);
+  const reducerPaths = Object.keys(reducers)
 
-  return function combine(state = {}, action){
-    var updatedState = {};
+  return function combine(state = {}, action, rootPath, updatedState, isChild = false ){
+    rootPath = rootPath || 'root'
+    updatedState = updatedState || {}
 
     reducerPaths.forEach(function(path){
-      var currentPath = action.path || path;
-      if (currentPath.substring(0, path.length) !== path) return;
+      const nextRootPath = join(rootPath, path)
+      const reducer = reducers[path]
+      if (typeof reducer !== 'function') return;
 
-      var reducer = reducers[path];
-      if (typeof reducer === 'function') {
-        var prevState = desimplify(state, currentPath);
-        var nextState = reducer(prevState, action);
+      if (reducer.length > 2) {
+        reducer(state, action, nextRootPath, updatedState, true)
+      } else {
+        const currentPath = join(nextRootPath, action.path)
+        const prevState = desimplify(state, currentPath)
+        const nextState = reducer(prevState, action)
         if (nextState !== prevState) {
-          updatedState[currentPath] = nextState;
+          updatedState[currentPath] = nextState
         }
       }
-    });
+    })
+
+    if (isChild) return;
 
     if (updatedState !== {}) {
-      var nextState = Object.assign({}, state);
-      for (var key in updatedState) {
-        update(nextState, key, updatedState[key]);
+      let nextState = Object.assign({}, state)
+      for (let key in updatedState) {
+        update(nextState, key, updatedState[key])
       }
-      return nextState;
+      return nextState
     } else {
-      return state;
+      return state
     }
   }
 }

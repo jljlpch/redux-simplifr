@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "redux": "^3.2",
-    "simplifr": "^0.1"
+    "simplifr": "^0.2"
   },
   "devDependencies": {
     "babel": "^5.8",
