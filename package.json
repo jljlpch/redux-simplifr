@@ -25,7 +25,7 @@
     "test": "faucet lib-test/*-test.js",
     "prepublish": "npm run build"
   },
-  "author": "Tin Skipor",
+  "author": "Konstantin Skipor",
   "repository": {
     "type": "git",
     "url": "https://github.com/krispo/redux-simplifr.git"
